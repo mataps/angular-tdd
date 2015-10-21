@@ -2,7 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-    <title>Sample todo app</title>
+        <title>Sample todo app</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script type="text/javascript" src="node_modules/lodash/index.js"></script>
 	</head>
 	<body ng-app="myapp">
 		<ng-view />
@@ -10,13 +12,63 @@
         <script type="text/ng-template" id="todoList.html">
             <h2>Todo List<h2>
             <ul>
-                <li ng-repeat="list in lists">{{list.name}}</li>
+                <li ng-repeat="list in lists">
+                    <div>
+                        <h3>
+                            {{list.name}}
+                            <small class="todo-completed" ng-show="list.completed">
+                                (Completed)
+                            </small>
+                            <small class="todo-ongoing" ng-show="!list.completed">
+                                (Ongoing)
+                            </small>
+                        </h3>
+                        <div id="todos-{{list.name}}">
+                            <ul>
+                                <li ng-repeat="todo in list.todos track by $index">
+                                    <div>
+                                        <span>{{todo.name}}</span>
+                                        <small class="todo-completed" ng-show="todo.completed">
+                                            (Completed)
+                                        </small>
+                                        <small class="todo-ongoing" ng-show="!todo.completed">
+                                            (Ongoing)
+                                        </small>
+                                        <form ng-submit="updateTodoName(todoName, list.name, $index)">
+                                            <input type="text" ng-model="todoName" />
+                                            <input type="submit" value="Change todo name" />
+                                        </form>
+                                        <button ng-click="deleteTodo(list.name, $index)">Delete todo</button>
+                                        <button ng-click="updateTodoStatus(list.name, $index)">Update status</button>
+                                    </div>
+                                    <br/>
+                                </li>
+                                <hr/>
+                                <form ng-submit="createTodo(todo, $index)">
+                                    <input type="text" ng-model="todo" placeholder="Add new todo here"/>
+                                    <input type="submit" value="Save"/>
+                                </form>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div>
+                        <form ng-submit="updateListName(list.name, listName)">
+                            <input type="text" ng-model="listName" />
+                            <input type="submit" value="Change list name" />
+                        </form>
+                        <button ng-click="deleteList(list.name)">Delete list</button>
+                        <button ng-show="list.todos.length" ng-click="updateListStatus(list.name)">Update status</button>
+                    </div>
+                </li>
             </ul>
+            <hr/>
             <form ng-submit="createList(name)">
-                <input type="text" ng-model="name" />
-                <input type="submit" value="Save" />
+                <input type="text" ng-model="name" placeholder="Add new list here"/>
+                <input type="submit" value="Save"/>
             </form>
         </script>
+        
 
 		<script src="node_modules/angular/angular.js"></script>
 		<script src="node_modules/angular-route/angular-route.js"></script>
