@@ -23,6 +23,7 @@
     "karma": "^0.13.11",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.2.1",
+    "karma-expect": "^1.1.1",
     "karma-mocha": "^0.2.0",
     "mocha": "^2.3.3",
     "mocha-clean": "^0.4.0"

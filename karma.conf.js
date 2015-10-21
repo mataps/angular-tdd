@@ -3,7 +3,7 @@ module.exports = function (config) {
 
 	config.set({
 		// basePath: '../../',
-		frameworks: ['mocha', 'chai'],
+		frameworks: ['mocha', 'expect'],
 		files: [
 			'node_modules/lodash/index.js',
 			'node_modules/angular/angular.js',
