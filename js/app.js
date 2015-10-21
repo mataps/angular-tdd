@@ -22,11 +22,19 @@ app.controller('listController', function ($scope) {
   };
 
   $scope.createList = function (name) {
-    $scope.lists.push({
-      name: name,
-      address: 'eastwood',
-      completed: false
-    });
+    console.log("name", name);
+    if(name) {
+      $scope.lists.push({
+        name: name,
+        status: 'Ongoing',
+        completed: false
+      });
+    }
+
+  };
+
+  $scope.updateStatus = function(e) {
+    console.log("e",e.status);
   };
 
   $scope.removeList = function (name) {

@@ -3,18 +3,68 @@
 	<head>
 		<meta charset="utf-8">
     <title>Sample todo app</title>
+    	<style type="text/css">
+    		body {
+    			font-family: sans-serif;
+				font-weight: 100;
+    			font-size: 13px;
+    		}
+    		table {
+    			border-collapse: collapse;
+				border-spacing: 0;
+    			empty-cells: show;
+    			border: 1px solid #cbcbcb;
+    		}
+    		thead {
+    			background-color: #e0e0e0;
+			    color: #000;
+			    text-align: left;
+			    vertical-align: bottom;
+    		}
+    		tr {
+    			display: table-row;
+				vertical-align: inherit;
+    			border-color: inherit;
+    		}
+			td {
+				border: 1px solid #bebebe;
+				padding: 0.5em 1em;
+				color: #777;
+				font-size: 0.8em;
+			}
+			th {
+			    border-left: 1px solid #cbcbcb;
+				border-width: 0 0 0 1px;
+				padding: 0.5em 1em;
+				font-size: inherit;
+				margin: 0;
+			}
+    	</style>
 	</head>
 	<body ng-app="myapp">
 		<ng-view />
 
         <script type="text/ng-template" id="todoList.html">
             <h2>Todo List<h2>
-            <ul>
-                <li ng-repeat="list in lists">{{list.name}}</li>
-            </ul>
-            <form ng-submit="createList(name)">
-                <input type="text" ng-model="name" />
-                <input type="submit" value="Save" />
+            <table>
+            	<thead>
+            		<tr>
+            			<th>Task</th>
+            			<th>Status</th>
+            			<th>Action</th>
+            		</tr>
+            	</thead>
+            	<tbody>
+        			<tr ng-repeat="list in lists">
+	            		<td>{{list.name}}</td>
+	            		<td ng-model="status">{{list.status}}</td>
+	            		<td><input type="checkbox" ng-model="confirmed" name="status" ng-change="updateStatus(this);">Done</td>
+	            	</tr>
+            	</tbody>
+            </table>
+            <form ng-submit="createList(taskName)" name="saveTaskForm">
+                <input type="text" name="taskName" ng-model="taskName" placeholder="Input Task"/>
+                <input type="submit" value="Add"/>
             </form>
         </script>
 
