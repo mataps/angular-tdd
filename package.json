@@ -6,18 +6,25 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/start.js",
-    "test": "karma start karma.conf.js",
-    "test-server": "mocha server/test || true"
+    "test": "karma start karma.conf.js"
   },
   "author": "Ryan Navarroza",
   "license": "ISC",
   "dependencies": {
+    "angular": "^1.4.7",
+    "angular-mocks": "^1.4.7",
+    "angular-route": "^1.4.7",
     "bluebird": "^2.10.2",
-    "expect.js": "^0.3.1",
-    "lodash": "^3.10.1",
-    "mocha": "^2.3.3"
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
+    "chai": "^3.3.0",
+    "expect.js": "^0.3.1",
+    "karma": "^0.13.11",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-mocha": "^0.2.0",
+    "mocha": "^2.3.3",
     "mocha-clean": "^0.4.0"
   }
 }

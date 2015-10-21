@@ -10,36 +10,36 @@
 
     beforeEach(inject(function (_$controller_, _$rootScope_) {
 			$scope = _$rootScope_.$new();
-
-      $controller = _$controller_('myController', {$scope: $scope});
+      $controller = _$controller_('listController', {$scope: $scope});
     }));
 
-    describe('Adding todo', function () {
-        it('should add new todo', function() {
-          $scope.addTodo('foo');
+    describe('List', function () {
+      
+      describe('#create', function () {
 
-          expect($scope.todos.length).toBe(1);
+        it('should have a list', function() {
+          $scope.createList('foo');
+          expect($scope.lists.length).to.equal(1);
         });
-    });
 
-    describe('Removing todo', function () {
-        it('should remove an exisiting todo', function() {
-          $scope.addTodo('foo');
-          
-          $scope.removeTodo('foo');
+      });
 
-          expect($scope.todos.length).toBe(0);
-        });
-    });
+      // describe('#update', function () {
+      //   it('should mark a list as completed', function () {
+      //     $scope.addTodo('foo');
+      //     $scope.complete('foo');
+      //     expect($scope.completedItems().length).toBe(1);
+      //   }); 
+      // });
+      //
+      // describe('#remove, function () {
+      //   it('should remove an exisiting todo', function() {
+      //     $scope.addTodo('foo');
+      //     $scope.removeTodo('foo');
+      //     expect($scope.todos.length).toBe(0);
+      //   });
+      // });
 
-    describe('Completing a todo', function () {
-      it('should mark a todo as completed', function () {
-        $scope.addTodo('foo');
-
-        $scope.complete('foo');
-        
-        expect($scope.completedItems().length).toBe(1);
-      }); 
     });
 
 })();
