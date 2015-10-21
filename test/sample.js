@@ -20,6 +20,8 @@
         it('should have a list', function() {
           $scope.createList('foo');
           expect($scope.lists.length).to.equal(1);
+          expect($scope.lists[0].name).to.equal('foo');
+          expect($scope.lists[0].completed).to.equal(false);
         });
 
       });
