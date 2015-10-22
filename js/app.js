@@ -24,6 +24,16 @@ app.controller('listController', function ($scope) {
         return list;
     }
 
+    function findList(name) {
+      $scope.index = $scope.find_index(name);
+
+      if (!~$scope.index) {
+          throw new Error($scope.errMessages.no_name);
+      }
+
+      return $scope.lists[$scope.index];
+    }
+
     $scope.lists = [];
     $scope.errMessages = {
         no_state: 'todo completed state missing',
@@ -66,8 +76,14 @@ app.controller('listController', function ($scope) {
         });
     };
 
-    $scope.addTodos = function (data1, data2) {
-        $scope.lists[0].todos.push(data1, data2);
+    $scope.addTodos = function () {
+      var todos = Array.prototype.slice.call(arguments);
+
+      todos.forEach(function (todo) {
+        if (!!~$scope.checkDuplicateTodoName(todo.name)) throw new Error('Duplicate todo name');
+        $scope.lists[0].todos.push(todo);
+      });
+        // $scope.lists[0].todos.push(data1, data2);
     };
 
     $scope.createTodo = function (todo_name, list_pos) {
@@ -153,18 +169,14 @@ app.controller('listController', function ($scope) {
     };
 
     $scope.markAsCompleted = function (name) {
-        $scope.index = $scope.find_index(name);
-
-        if (~$scope.index) {
-            $scope.lists[$scope.index].completed = true;
-        }
-        else {
-            throw new Error($scope.errMessages['no_name']);
-        }
+      var list = findList(name);
+      list.completed = true;
     };
 
-    $scope.markListAsComplete = function (name) {};
 
-    $scope.markListAsIncomplete = function (name) {};
+    $scope.markAsIncomplete = function (name) {
+      var list = findList(name);
+      list.completed = false;
+    };
 });
 
