@@ -14,6 +14,16 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('listController', function ($scope) {
+
+    function checkCompletion(list) {
+        var completed = list.todos.filter(function (todo) {
+          return todo.completed;
+        });
+        list.completed = completed.length === list.todos.length;
+
+        return list;
+    }
+
     $scope.lists = [];
     $scope.errMessages = {
         no_state: 'todo completed state missing',
@@ -58,7 +68,7 @@ app.controller('listController', function ($scope) {
 
     $scope.addTodos = function (data1, data2) {
         $scope.lists[0].todos.push(data1, data2);
-    }
+    };
 
     $scope.createTodo = function (todo_name, list_pos) {
         $scope.lists[list_pos].todos.push({
@@ -79,7 +89,7 @@ app.controller('listController', function ($scope) {
         });
 
         return ctr === $scope.lists[0].todos.length ? 'complete' : 'incomplete';
-    }
+    };
 
     $scope.checkDuplicateTodoName = function (name) {
         var temp = [];
@@ -107,22 +117,16 @@ app.controller('listController', function ($scope) {
         });
     };
 
+
     $scope.updateTodoStatus = function (list_name, todo_pos) {
         var a = $scope.lists[$scope.find_index(list_name)],
             b = a.todos,
             c = b[todo_pos];
 
 
-        if (c.completed) {
-            c.completed = false;
-            a.completion_ctr--;
-        }
-        else {
-            c.completed = true;
-            a.completion_ctr++;
-        }
+        c.completed = !c.completed;
 
-        a.completed = a.completion_ctr >= b.length ? 'true' : false;
+        a = checkCompletion(a);
     };
 
     $scope.removeList = function (name) {
@@ -149,7 +153,7 @@ app.controller('listController', function ($scope) {
     };
 
     $scope.markAsCompleted = function (name) {
-        $scope.index = $scope.find_index(name)
+        $scope.index = $scope.find_index(name);
 
         if (~$scope.index) {
             $scope.lists[$scope.index].completed = true;
