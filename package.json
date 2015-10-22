@@ -15,7 +15,8 @@
     "angular-mocks": "^1.4.7",
     "angular-route": "^1.4.7",
     "bluebird": "^2.10.2",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "materialize-css": "^0.97.1"
   },
   "devDependencies": {
     "chai": "^3.3.0",

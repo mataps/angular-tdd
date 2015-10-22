@@ -1,83 +1,116 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
+
+    <head>
+        <meta charset="utf-8">
         <title>Sample todo app</title>
+
         <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="node_modules/materialize-css/bin/materialize.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script type="text/javascript" src="node_modules/materialize-css/materialize.js"></script>
         <script type="text/javascript" src="node_modules/lodash/index.js"></script>
-	</head>
-	<body ng-app="myapp">
-		<ng-view />
+
+    </head>
+
+    <body ng-app="myapp">
+        <ng-view />
 
         <script type="text/ng-template" id="todoList.html">
-            <h2>Todo List<h2>
-            <ul>
-                <li ng-repeat="list in lists">
-                    <div>
-                        <h3>
-                            {{list.name}}
-                            <small class="todo-completed" ng-show="list.completed">
-                                (Completed)
-                            </small>
-                            <small class="todo-ongoing" ng-show="!list.completed">
-                                (Ongoing)
-                            </small>
-                        </h3>
-                        <div id="todos-{{list.name}}">
-                            <ul>
-                                <li ng-repeat="todo in list.todos track by $index">
-                                    <div>
-                                        <span>{{todo.name}}</span>
-                                        <small class="todo-completed" ng-show="todo.completed">
-                                            (Completed)
-                                        </small>
-                                        <small class="todo-ongoing" ng-show="!todo.completed">
-                                            (Ongoing)
-                                        </small>
-                                        <form ng-submit="updateTodoName(todoName, list.name, $index)">
-                                            <input type="text" ng-model="todoName" />
-                                            <input type="submit" value="Change todo name" />
-                                        </form>
-                                        <button ng-click="deleteTodo(list.name, $index)">Delete todo</button>
-                                        <button ng-click="updateTodoStatus(list.name, $index)">Update status</button>
-                                    </div>
-                                    <br/>
-                                </li>
-                                <hr/>
+            <div class="container">
+                <h2>Todo List<h2>
+                <ul>
+                    <li ng-repeat="list in lists">
+                        <div class="z-depth-2">
+                            <div class="new-todo-form z-depth-1">
                                 <form ng-submit="createTodo(todo, $index)">
-                                    <input type="text" ng-model="todo" placeholder="Add new todo here"/>
-                                    <input type="submit" value="Save"/>
+                                    <div class="row">
+                                        <div class="col s9">
+                                            <input type="text" ng-model="todo" placeholder="Add new todo here"/>
+                                        </div>
+                                        <div class="col s3">
+                                            <input class="waves-effect waves-light btn new-todo-submit" type="submit" class="waves-effect waves-light btn" value="Save"/>
+                                        </div>
+                                    </div>
                                 </form>
-                            </ul>
+                            </div>
+                            <div class="list-card">
+                                <h5>
+                                    {{list.name}}
+                                    <small class="todo-completed" ng-show="list.completed">
+                                        (Completed)
+                                    </small>
+                                    <small class="todo-ongoing" ng-show="!list.completed">
+                                        (Ongoing)
+                                    </small>
+                                </h5>
+                                <div>
+                                    <ul class="collection">
+                                        <li class="collection-item" ng-repeat="todo in list.todos track by $index">
+                                            <div class="todo-containers row">
+                                                <div class="col s6">
+                                                    <div class="todo-name">
+                                                        <span>{{todo.name}}</span>
+                                                        <small class="todo-completed" ng-show="todo.completed">
+                                                            (Completed)
+                                                        </small>
+                                                        <small class="todo-ongoing" ng-show="!todo.completed">
+                                                            (Ongoing)
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                                <div class="col s4 todo-to-be-centered">
+                                                    <form ng-submit="updateTodoName(todoName, list.name, $index)">
+                                                        <input type="text" ng-model="todoName" />
+                                                        <input type="submit" class="waves-effect waves-light btn" value="Change todo name" />
+                                                    </form>
+                                                </div>
+                                                <div class="col s1">
+                                                    <button class="btn-floating btn-large waves-effect waves-light todo-delete blue" ng-click="deleteTodo(list.name, $index)"><i class="material-icons">delete</i>
+                                                    </button>
+                                                </div>
+                                                <div class="col s1">
+                                                    <button class="btn-floating btn-large waves-effect waves-light todo-update blue" ng-click="updateTodoStatus(list.name, $index)"><i class="material-icons">spellcheck</i></button></div>
+                                            </div>
+                                            <br/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row list-control z-depth-1">
+                                <div class="col l10">
+                                    <form ng-submit="updateListName(list.name, listName)">
+                                        <input type="text" ng-model="listName" />
+                                        <input type="submit" class="waves-effect waves-light btn list-control-change-name" value="Change list name" />
+                                    </form>
+                                </div>
+                                <div class="col l1">
+                                    <button alt="Delete this list" title="Delete this list" class="btn-floating btn-large waves-effect waves-light red list-control-delete-list" ng-click="deleteList(list.name)"><i class="material-icons list-control-delete-icon">delete</i></button>
+                                </div>
+                                <div class="col l1">
+                                    <button alt="Update the status of this list" title="Update the status of this list" class="btn-floating btn-large waves-effect waves-light red list-control-update-status" ng-show="list.todos.length" ng-click="updateListStatus(list.name)"><i class="material-icons list-control-update-icon">spellcheck</i></button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <hr/>
-                    <div>
-                        <form ng-submit="updateListName(list.name, listName)">
-                            <input type="text" ng-model="listName" />
-                            <input type="submit" value="Change list name" />
-                        </form>
-                        <button ng-click="deleteList(list.name)">Delete list</button>
-                        <button ng-show="list.todos.length" ng-click="updateListStatus(list.name)">Update status</button>
-                    </div>
-                </li>
-            </ul>
-            <hr/>
-            <form ng-submit="createList(name)">
-                <input type="text" ng-model="name" placeholder="Add new list here"/>
-                <input type="submit" value="Save"/>
-            </form>
+                    </li>
+                </ul>
+                <form ng-submit="createList(name)">
+                    <input type="text" ng-model="name" placeholder="Add new list here"/>
+                    <input type="submit" class="waves-effect waves-light btn" value="Save"/>
+                </form>
+            </div>
         </script>
         
+        <script src="node_modules/angular/angular.js"></script>
+        <script src="node_modules/angular-route/angular-route.js"></script>
 
-		<script src="node_modules/angular/angular.js"></script>
-		<script src="node_modules/angular-route/angular-route.js"></script>
+        <script src="js/app.js"></script>
+        <!-- <script src="js/controllers/todoCtrl.js"></script> -->
+        <!-- <script src="js/services/todoStorage.js"></script> -->
+        <!-- <script src="js/directives/todoFocus.js"></script> -->
+        <!-- <script src="js/directives/todoEscape.js"></script> -->
 
-		<script src="js/app.js"></script>
-		<!-- <script src="js/controllers/todoCtrl.js"></script> -->
-		<!-- <script src="js/services/todoStorage.js"></script> -->
-		<!-- <script src="js/directives/todoFocus.js"></script> -->
-		<!-- <script src="js/directives/todoEscape.js"></script> -->
-
-	</body>
+    </body>
 </html>
+

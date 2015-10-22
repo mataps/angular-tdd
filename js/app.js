@@ -14,99 +14,153 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('listController', function ($scope) {
-  $scope.todo_status_ctr = 0;
-  $scope.lists = [];
-  $scope.errMessages = {
-    no_state: 'todo completed state missing',
-    no_name: 'todo name missing'
-  };
+    $scope.lists = [];
+    $scope.errMessages = {
+        no_state: 'todo completed state missing',
+        no_name: 'todo name missing'
+    };
 
-  $scope.find_index = function (list_name) {
-    return _.findIndex($scope.lists, {name: list_name});
-  };
-
-  $scope.createList = function (name) {
-    $scope.lists.push({
-      name: name,
-      completed: false,
-      todos: [],
-    });
-  };
-
-  $scope.updateListName = function (current_name, new_list_name) {
-    $scope.lists[$scope.find_index(current_name)].name = new_list_name;
-  };
-
-  $scope.updateListStatus = function (list_name) {
-    $scope.arr = $scope.lists[$scope.find_index(list_name)];
-
-    if ($scope.arr.todos.length) {
-        $scope.arr.completed = $scope.arr.completed ? false : true;
-        _.forEach($scope.arr.todos, function(n, key) {
-            n.completed = $scope.arr.completed ? true : false;
+    $scope.find_index = function (list_name) {
+        return _.findIndex($scope.lists, {
+            name: list_name
         });
-    }
-  };
+    };
 
-  $scope.deleteList = function (list_name) {
-    _.remove($scope.lists, function (n, key) {
-        return $scope.find_index(list_name) === key;
-    });
-  };
+    $scope.createList = function (name) {
+        $scope.lists.push({
+            name: name,
+            completed: false,
+            todos: [],
+            completion_ctr: 0
+        });
+    };
 
-  $scope.createTodo = function (todo_name, list_pos) {
-    $scope.lists[list_pos].todos.push({
-        name: todo_name,
-        completed: false
-    });
-  };
+    $scope.updateListName = function (current_name, new_list_name) {
+        $scope.lists[$scope.find_index(current_name)].name = new_list_name;
+    };
 
-  $scope.updateTodoName = function (todo_name, list_name, todo_pos) {
-    $scope.lists[$scope.find_index(list_name)].todos[todo_pos].name = todo_name;
-  };
+    $scope.updateListStatus = function (list_name) {
+        $scope.arr = $scope.lists[$scope.find_index(list_name)];
 
-  $scope.deleteTodo = function (list_name, todo_pos) {
-    var a = $scope.lists[$scope.find_index(list_name)].todos;
+        if ($scope.arr.todos.length) {
+            $scope.arr.completed = $scope.arr.completed ? false : true;
+            _.forEach($scope.arr.todos, function (n, key) {
+                n.completed = $scope.arr.completed ? true : false;
+            });
+        }
+    };
 
-    _.remove(a, function (n, key) {
-        return todo_pos === key;
-    });
-  };
+    $scope.deleteList = function (list_name) {
+        _.remove($scope.lists, function (n, key) {
+            return $scope.find_index(list_name) === key;
+        });
+    };
 
-  $scope.updateTodoStatus = function (list_name, todo_pos) {
-    var a = $scope.lists[$scope.find_index(list_name)],
-        b = a.todos,
-        c = b[todo_pos];
-
-    c.completed = c.completed ? false : true;
-
-    if (c.completed) {
-        $scope.todo_status_ctr++;
+    $scope.addTodos = function (data1, data2) {
+        $scope.lists[0].todos.push(data1, data2);
     }
 
-    a.completed = $scope.todo_status_ctr === b.length ? 'true' : false;
-  };
+    $scope.createTodo = function (todo_name, list_pos) {
+        $scope.lists[list_pos].todos.push({
+            name: todo_name,
+            completed: false
+        });
+    };
 
-  $scope.removeList = function (name) {
-    _.remove($scope.lists, {
-      name: name
-    });
-  };
+    $scope.checkAllTodoStatus = function (data) {
+        var ctr = 0;
 
-  $scope.markAsCompleted = function (name) {
-    $scope.index = $scope.find_index(name)
+        _.forEach($scope.lists[0].todos, function (n, key) {
+            n.completed = data;
 
-    if (~$scope.index) {
-        $scope.lists[$scope.index].completed = true;
+            if (n.completed) {
+                ctr++;
+            }
+        });
+
+        return ctr === $scope.lists[0].todos.length ? 'complete' : 'incomplete';
     }
-    else {
-        throw new Error($scope.errMessages['no_name']);
-    }
-  };
 
-  $scope.markListAsComplete = function (name) {
-  };
+    $scope.checkDuplicateTodoName = function (name) {
+        var temp = [];
 
-  $scope.markListAsIncomplete = function (name) {
-  };
+        _.forEach($scope.lists, function (a, key) {
+            _.forEach(a.todos, function (b, key) {
+                temp.push(b);
+            });
+        });
+
+        return _.findIndex(temp, {
+            name: name
+        });
+    };
+
+    $scope.updateTodoName = function (todo_name, list_name, todo_pos) {
+        $scope.lists[$scope.find_index(list_name)].todos[todo_pos].name = todo_name;
+    };
+
+    $scope.deleteTodo = function (list_name, todo_pos) {
+        var a = $scope.lists[$scope.find_index(list_name)].todos;
+
+        _.remove(a, function (n, key) {
+            return todo_pos === key;
+        });
+    };
+
+    $scope.updateTodoStatus = function (list_name, todo_pos) {
+        var a = $scope.lists[$scope.find_index(list_name)],
+            b = a.todos,
+            c = b[todo_pos];
+
+
+        if (c.completed) {
+            c.completed = false;
+            a.completion_ctr--;
+        }
+        else {
+            c.completed = true;
+            a.completion_ctr++;
+        }
+
+        a.completed = a.completion_ctr >= b.length ? 'true' : false;
+    };
+
+    $scope.removeList = function (name) {
+        _.remove($scope.lists, {
+            name: name
+        });
+    };
+
+    $scope.removeTodo = function (name) {
+        var ctr = 0;
+
+        _.forEach($scope.lists, function (a, key) {
+            if (_.findIndex(a.todos, {
+                    name: name
+                }) > -1) {
+                _.remove(a.todos, {
+                    name: name
+                });
+                ctr++;
+            }
+        });
+
+        return ctr;
+    };
+
+    $scope.markAsCompleted = function (name) {
+        $scope.index = $scope.find_index(name)
+
+        if (~$scope.index) {
+            $scope.lists[$scope.index].completed = true;
+        }
+        else {
+            throw new Error($scope.errMessages['no_name']);
+        }
+    };
+
+    $scope.markListAsComplete = function (name) {};
+
+    $scope.markListAsIncomplete = function (name) {};
 });
+
