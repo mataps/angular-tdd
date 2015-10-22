@@ -5,3 +5,88 @@
 .todo-ongoing {
     color: blue;
 }
+
+.list-card {
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+input[type="submit"] {
+    font-size: 1rem;
+}
+
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.btn {
+    font-size: 1rem !important;
+}
+
+.new-todo-submit {
+    width: 100%;
+    position: relative;
+    top: 15px;
+}
+
+.new-todo-form {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: .5rem;
+    background: #eeeeee;
+}
+
+.list-control {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    background: #eeeeee;
+}
+
+.list-control col {
+    text-align: center;
+}
+
+.list-control-change-name {
+    position: relative;
+    bottom: 20px;
+}
+
+.list-control-delete-list, .list-control-update-status {
+    position: relative;
+    top: 30px;
+}
+
+.list-control-delete-icon, .list-control-update-icon {
+    position: relative;
+    bottom: 6px;
+}
+
+.todo-containers .todo-to-be-centered {
+    text-align: center;
+}
+
+.todo-containers .s6 {
+    font-size: 1.25rem;
+}
+
+.todo-delete, .todo-update {
+    position: relative;
+    top: 44px;
+}
+
+.todo-delete i {
+    position: relative;
+    bottom: 6px;
+}
+
+.todo-update i {
+    position: relative;
+    bottom: 6px;
+}
+
+.todo-name {
+    position: relative;
+    top: 56px;
+}
+

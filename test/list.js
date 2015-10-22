@@ -1,59 +1,154 @@
 /*global describe, it, beforeEach, inject, expect*/
 
-(function() {
+(function () {
 
     'use strict';
 
     var $controller, $scope;
 
-		beforeEach(module('myapp'));
+    beforeEach(module('myapp'));
 
     beforeEach(inject(function (_$controller_, _$rootScope_) {
-		$scope = _$rootScope_.$new();
-        $controller = _$controller_('listController', {$scope: $scope});
+        $scope = _$rootScope_.$new();
+        $controller = _$controller_('listController', {
+            $scope: $scope
+        });
     }));
 
     describe('List', function () {
 
         beforeEach('create a list', function () {
-            $scope.createList('ryan');
-            expect($scope.lists.length).to.equal(1);
-            expect($scope.lists[0].name).to.equal('ryan');
-            expect($scope.lists[0].completed).to.equal(false);
-        });
-      
-      // describe('#create', function () {
-      //   it('should have a list', function() {
-      //     expect($scope.lists.length).to.equal(1);
-      //     expect($scope.lists[0].name).to.equal('foo');
-      //     expect($scope.lists[0].completed).to.equal(false);
-      //   });
-      // });
-
-      describe('#update', function () {
-        it('should be marked as completed', function () {
-            // check if updated completed status (state) if from ryan
-            $scope.markAsCompleted('ryan');
-            expect($scope.lists[0].completed).to.equal(true);
-        }); 
-
-        it('should throw an error when name is missing', function () {
-            expect($scope.markAsCompleted).withArgs('').to.throwError(function (error) {
-                expect(error.message).to.be($scope.errMessages['no_name']);
+            var name = 'ryan';
+            $scope.createList(name);
+            var list = _.find($scope.lists, {
+                name: name
             });
+
+            // failed (name cannot be empty, hence the test FAILS.)
+            // expect(list.name).to.equal('');
+            // passing (name is not empty, hence the test PASSES.)
+            expect(list.name).to.not.equal('');
+
+            // failed (name 'ryan' already exists in $scope.lists, hence the test FAILS.)
+            // expect(list.name).to.not.equal('ryan');
+            // passing (name 'ronald' does not exist in $scope.lists, hence the test PASSES.)
+            expect(list.name).to.not.equal('ronald');
+
+            // failed (status 'completed: true' is not created in every list, hence the test FAILS.)
+            // expect(list.completed).to.equal(true);
+            // passing (status 'completed: false' is created in every list, hence the test PASSES.)
+            expect(list.completed).to.equal(false);
+
+            // failed (todo length is equal 0 in every new list, hence the test FAILS)
+            // expect(list.todos.length > 0).to.be.ok();
+            // passing (todo length is 0 in every new list, hence the test PASSES)
+            expect(list.todos.length > 0).to.not.be.ok();
         });
 
-        // it('should throw an error when address is missing')
-      });
-      //
-      // describe('#remove, function () {
-      //   it('should remove an exisiting todo', function() {
-      //     $scope.addTodo('foo');
-      //     $scope.removeTodo('foo');
-      //     expect($scope.todos.length).toBe(0);
-      //   });
-      // });
+        beforeEach('insert todo in list', function () {
+            $scope.addTodos({
+                name: 'todo 1',
+                completed: false
+            }, {
+                name: 'todo 2',
+                completed: false
+            });
+
+            // failed
+            // expect($scope.lists[0].todos.length > 0).to.not.be.ok();
+            // passing
+            expect($scope.lists[0].todos.length > 0).to.be.ok();
+        });
+
+        describe('#update', function () {
+
+            it('should be marked as complete (list)', function () {
+                var status = $scope.lists[0].completed;
+                status = true;
+
+                // failed
+                // expect(status).to.not.equal(true);
+                // passing
+                expect(status).to.equal(true);
+            });
+
+            it('should be marked as incomplete (list)', function () {
+                var status = $scope.lists[0].completed;
+                status = false;
+
+                // failed
+                // expect(status).to.equal(true);
+                // passing
+                expect(status).to.not.equal(true);
+            });
+
+            it('should update todo name without duplicate', function () {
+                // $scope.checkDuplicateTodoName('todo 1');
+
+                // failed
+                // expect($scope.checkDuplicateTodoName('todo 1') > -1).to.not.equal(true);
+                // passing
+                expect($scope.checkDuplicateTodoName('todo 1') > -1).to.equal(true);
+            })
+
+            it('should be marked as complete (todo)', function () {
+                var status = $scope.lists[0].todos[0].completed;
+                status = true;
+
+                // failed
+                // expect(status).to.not.equal(true);
+                // passing
+                expect(status).to.equal(true);
+            });
+
+            it('should be marked as incomplete (todo)', function () {
+                var status = $scope.lists[0].todos[0].completed;
+                status = false;
+
+                // failed
+                // expect(status).to.equal(true);
+                // passing
+                expect(status).to.not.equal(true);
+            });
+
+            it('should be marked as complete when all todos are completed (list)', function () {
+                // failed 
+                // expect($scope.checkAllTodoStatus(true)).to.not.equal('complete');
+                // passing
+                expect($scope.checkAllTodoStatus(true)).to.equal('complete');
+            });
+
+            it('should be marked as incomplete when at least one todo in incomplete (list)',
+                function () {
+                    // failed 
+                    // expect($scope.checkAllTodoStatus(false)).to.equal('complete');
+                    // passing
+                    expect($scope.checkAllTodoStatus(false)).to.not.equal('complete');
+                });
+
+        });
+
+        describe('#delete', function () {
+
+            it('should remove an existing list', function () {
+                $scope.removeList('ryan');
+
+                // failed
+                // expect($scope.lists.length > 0).to.be.ok();
+                // passing
+                expect($scope.lists.length > 0).to.not.be.ok();
+            });
+
+            it('should remove an existing todo', function () {
+                // failed
+                // expect($scope.removeTodo('todo 1') > 0).to.not.be.ok();
+                // passing
+                expect($scope.removeTodo('todo 1') > 0).to.be.ok();
+            });
+
+        });
 
     });
 
 })();
+
